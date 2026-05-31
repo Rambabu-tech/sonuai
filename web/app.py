@@ -13,10 +13,10 @@ from rq import Queue
 from extensions import db
 from web.models import User, JobApplication
 
-# ✅ FIX PATH
+# ✅ PATH FIX
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-# 🚀 REDIS (PRODUCTION SAFE)
+# 🚀 REDIS (SAFE)
 redis_url = os.getenv("REDIS_URL", "redis://localhost:6379")
 redis_conn = Redis.from_url(redis_url)
 queue = Queue("jobs", connection=redis_conn)
@@ -25,13 +25,15 @@ queue = Queue("jobs", connection=redis_conn)
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "secret")
 
-# ✅ DATABASE
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///site.db"
+# ✅ DATABASE (Render safe)
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv(
+    "DATABASE_URL", "sqlite:///site.db"
+)
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db.init_app(app)
 
-# 🔥 CREATE TABLES (CRITICAL)
+# 🔥 CREATE TABLES
 with app.app_context():
     db.create_all()
 
@@ -65,7 +67,7 @@ def dashboard():
     return render_template("dashboard.html", jobs=jobs)
 
 
-# 🚀 RUN JOBS (QUEUE VERSION 🚀)
+# 🚀 RUN JOBS (QUEUE)
 @app.route("/run")
 @login_required
 def run_jobs():
@@ -77,7 +79,7 @@ def run_jobs():
     return "🚀 Job queued successfully!"
 
 
-# 🚀 UPLOAD RESUME
+# 🚀 UPLOAD
 @app.route("/upload", methods=["POST"])
 @login_required
 def upload():
@@ -137,6 +139,5 @@ def logout():
     return redirect("/login")
 
 
-# 🚀 RUN SERVER (LOCAL ONLY)
 if __name__ == "__main__":
     app.run(debug=True)
