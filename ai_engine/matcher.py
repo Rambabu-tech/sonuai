@@ -1,21 +1,38 @@
-from sentence_transformers import SentenceTransformer
-from sklearn.metrics.pairwise import cosine_similarity
+from openai import OpenAI
+import os
 
-model = SentenceTransformer("all-MiniLM-L6-v2")
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
+def compute_similarity(resume, job_desc):
 
-def compute_similarity(resume, job):
-    if not job:
-        return 0.0
+    prompt = f"""
+You are an AI job matcher.
 
-    emb = model.encode([resume, job])
-    return float(cosine_similarity([emb[0]], [emb[1]])[0][0])
+Compare this RESUME and JOB DESCRIPTION.
+
+Give a match score from 0 to 1.
+
+Resume:
+{resume}
+
+Job:
+{job_desc}
+
+Only return number like 0.85
+"""
+
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": prompt}]
+    )
+
+    try:
+        score = float(response.choices[0].message.content.strip())
+    except:
+        score = 0.5
+
+    return score
 
 
 def decide_application(score):
-    if score > 0.06:
-        return "APPLY"
-    elif score > 0.03:
-        return "REVIEW"
-    else:
-        return "SKIP"
+    return "APPLY" if score > 0.6 else "SKIP"

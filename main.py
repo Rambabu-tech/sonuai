@@ -11,15 +11,18 @@ from ai_engine.matcher import compute_similarity, decide_application
 from ai_engine.cover_letter import generate_cover_letter
 from apply.auto_apply import apply_to_job
 
+# 🔥 Load env
 load_dotenv()
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 
-# 🔥 CREATE APP (NO circular import)
+# 🔥 Create app (no circular import)
 def create_app():
     app = Flask(__name__)
 
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///site.db"
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv(
+        "DATABASE_URL", "sqlite:///site.db"
+    )
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
     db.init_app(app)
@@ -27,7 +30,7 @@ def create_app():
     return app
 
 
-# 🔥 MAIN FUNCTION (WORKER + CLI SAFE)
+# 🔥 MAIN LOGIC
 def run_for_user(user_id):
 
     app = create_app()
@@ -42,7 +45,7 @@ def run_for_user(user_id):
             print("❌ User not found")
             return
 
-        # ✅ Resume fallback
+        # ✅ Resume
         resume_path = user.resume_path or "uploads/default_resume.txt"
         resume_path = os.path.abspath(resume_path)
 
@@ -74,12 +77,12 @@ def run_for_user(user_id):
 
         print(f"\n🔎 Processing {len(jobs)} jobs...\n")
 
-        # ✅ Dedup
         seen_urls = set()
         results = []
 
         output_file = f"applications_{user.id}.json"
 
+        # ✅ Dedup
         if os.path.exists(output_file):
             with open(output_file) as f:
                 old = json.load(f)
@@ -99,6 +102,7 @@ def run_for_user(user_id):
             print(f"\n🔍 {title} @ {company}")
 
             try:
+                # 🚀 AI MATCHING (THIS IS YOUR STEP 2 FIX)
                 score = compute_similarity(resume_content, description)
                 decision = decide_application(score)
 
@@ -115,10 +119,16 @@ def run_for_user(user_id):
                     except:
                         cover_letter = ""
 
-                    applied = apply_to_job(url, resume_path, cover_letter)
+                    # ⚠️ Disable Selenium on Render
+                    if os.getenv("RENDER") == "true":
+                        print("⚠️ Skipping auto apply (Render)")
+                        applied = False
+                    else:
+                        applied = apply_to_job(url, resume_path, cover_letter)
 
                     status = "APPLIED" if applied else "FAILED"
 
+                # ✅ Save DB
                 db.session.add(JobApplication(
                     user_id=user.id,
                     job_title=title,
@@ -142,6 +152,7 @@ def run_for_user(user_id):
 
         db.session.commit()
 
+        # ✅ Save JSON
         with open(output_file, "w") as f:
             json.dump(results, f, indent=2)
 
