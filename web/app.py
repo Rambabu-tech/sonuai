@@ -1,34 +1,41 @@
 import os
 import json
 import sys
-import subprocess
 
 from flask import Flask, render_template, redirect, request
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 
+from redis import Redis
+from rq import Queue
+
 from extensions import db
-from web.models import User
+from web.models import User, JobApplication
 
 # ✅ FIX PATH
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+# 🚀 REDIS (PRODUCTION SAFE)
+redis_url = os.getenv("REDIS_URL", "redis://localhost:6379")
+redis_conn = Redis.from_url(redis_url)
+queue = Queue("jobs", connection=redis_conn)
 
 # 🚀 FLASK APP
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "secret")
 
-# ✅ SAME DB AS MAIN
+# ✅ DATABASE
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///site.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db.init_app(app)
 
-# 🔥 CRITICAL FIX — CREATE TABLES ON STARTUP
+# 🔥 CREATE TABLES (CRITICAL)
 with app.app_context():
-    from web.models import User, JobApplication
     db.create_all()
 
+# 🚀 LOGIN
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
 
@@ -40,8 +47,10 @@ def load_user(user_id):
 
 # 🚀 DASHBOARD
 @app.route("/")
-@login_required
 def dashboard():
+
+    if not current_user.is_authenticated:
+        return redirect("/login")
 
     file = f"applications_{current_user.id}.json"
 
@@ -56,20 +65,16 @@ def dashboard():
     return render_template("dashboard.html", jobs=jobs)
 
 
-# 🚀 RUN JOBS (SAFE VERSION FOR RENDER)
+# 🚀 RUN JOBS (QUEUE VERSION 🚀)
 @app.route("/run")
 @login_required
 def run_jobs():
 
-    try:
-        # ✅ Use python3 for Render
-        subprocess.Popen([
-            "python3", "main.py", str(current_user.id)
-        ])
-    except Exception as e:
-        return f"❌ Error starting job: {str(e)}"
+    from worker_tasks import process_user_jobs
 
-    return "🚀 AI job started!"
+    queue.enqueue(process_user_jobs, current_user.id)
+
+    return "🚀 Job queued successfully!"
 
 
 # 🚀 UPLOAD RESUME
@@ -132,6 +137,6 @@ def logout():
     return redirect("/login")
 
 
-# 🚀 RUN SERVER
+# 🚀 RUN SERVER (LOCAL ONLY)
 if __name__ == "__main__":
     app.run(debug=True)
