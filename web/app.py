@@ -24,8 +24,9 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db.init_app(app)
 
-# ✅ 🔥 FIX: CREATE TABLES (IMPORTANT FOR RENDER)
+# 🔥 CRITICAL FIX — CREATE TABLES ON STARTUP
 with app.app_context():
+    from web.models import User, JobApplication
     db.create_all()
 
 login_manager = LoginManager(app)
