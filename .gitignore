@@ -1,2 +1,8 @@
 credentials.json
 mailbot/token.json
+jobai_env/
+__pycache__/
+*.pyc
+.env
+*.db
+uploads/
