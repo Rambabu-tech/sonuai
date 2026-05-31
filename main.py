@@ -10,6 +10,7 @@ from web.models import User, JobApplication
 from ai_engine.matcher import compute_similarity, decide_application
 from ai_engine.cover_letter import generate_cover_letter
 from apply.auto_apply import apply_to_job
+from job_sources import fetch_remoteok_jobs
 
 # 🔥 Load env
 load_dotenv()
@@ -59,7 +60,7 @@ def run_for_user(user_id):
         print("✅ Resume loaded")
 
         # ✅ Load jobs
-        jobs = []
+        jobs = fetch_remoteok_jobs()
         files = [
             "linkedin_jobs.json",
             "jobs.json",
