@@ -1,0 +1,91 @@
+
+🚀 Starting AI Job Processing Engine
+
+👤 User Loaded: 1
+📄 Loading resume...
+✅ Resume loaded successfully
+
+📡 Loading jobs from scraper files...
+
+✅ Loaded 1 LinkedIn jobs
+✅ Loaded 7 Greenhouse jobs
+✅ Loaded 4 Lever jobs
+✅ Loaded 3 RemoteOK jobs
+✅ Loaded 0 Workday jobs
+✅ Loaded 0 Dice jobs
+✅ Loaded 0 Wellfound jobs
+✅ Loaded 0 YC jobs
+✅ Loaded 0 Indeed jobs
+
+🔎 Processing 15 jobs...
+
+------------------------------------------------
+🔍 Checking Job: DevOps Engineer @ LinkedIn
+📊 Match Score: 0.020
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Staff Infrastructure Engineer, Privy @ Stripe
+📊 Match Score: -0.018
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Senior Systems Engineer - OIC @ Airbnb
+📊 Match Score: 0.023
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Senior Machine Learning Platform Engineer (Platform) @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Senior Site Reliability Engineer, Identity Platform @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Senior Site Reliability Engineer, IT Infrastructure @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Senior Software Engineer, SRE @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Site Reliability Engineer, IT Infrastructure @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Engineering Manager - Machine Learning Infrastructure - 2026-03-13 @ Plaid
+📊 Match Score: 0.009
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Senior Software Engineer - Data Infrastructure - 2026-03-13 @ Plaid
+📊 Match Score: 0.006
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Senior Software Engineer - ML Infrastructure - 2026-03-13 @ Plaid
+📊 Match Score: 0.009
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Software Engineer - Platform - 2026-03-13 @ Plaid
+📊 Match Score: 0.011
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Staff DevOps Engineer @ Crunchyroll, LLC
+📄 Tailored resume created: tailored_resume_Staff_DevOps_Engineer.txt
+📊 Match Score: 0.172
+🤖 Decision: APPLY
+Opening job: https://remoteOK.com/remote-jobs/remote-staff-devops-engineer-crunchyroll-llc-1130679
+No Easy Apply button
+✅ Application attempted
+------------------------------------------------
+🔍 Checking Job: Senior DevOps Engineer @ ChowNow 
+📊 Match Score: 0.032
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: DevOps Engineer @ MEMX
+📊 Match Score: 0.097
+🤖 Decision: REVIEW
+
+✅ Database updated successfully
+📁 Application history saved: applications_1.json
+
+🎯 AI Job Processing Completed
+

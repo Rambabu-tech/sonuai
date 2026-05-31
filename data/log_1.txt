@@ -1,0 +1,390 @@
+/Users/rambabu/job-ai-bot/main.py:44: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  user = User.query.get(user_id)
+
+🚀 Starting AI Job Processing Engine
+
+👤 User Loaded: 1
+📄 Loading resume...
+✅ Resume loaded successfully
+
+📡 Loading jobs from scraper files...
+
+✅ Loaded 1 LinkedIn jobs
+✅ Loaded 91 Greenhouse jobs
+
+🔎 Processing 92 jobs...
+
+------------------------------------------------
+🔍 Checking Job: DevOps Engineer @ LinkedIn
+📊 Match Score: 0.020
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Account Executive, Platforms (Existing Business) - 2026-03-13 @ Stripe
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Account Executive, Platforms, Existing Business (French Speaking) - 2026-03-13 @ Stripe
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Account Executive, Platforms (Grower) - 2026-03-13 @ Stripe
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Account Executive, Platforms (Grower) - 2026-03-13 @ Stripe
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Account Executive, Platforms (Grower) - 2026-03-13 @ Stripe
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Account Executive, Platforms - Strategics - 2026-03-13 @ Stripe
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Account Executive, Platforms (Strategics) - 2026-03-13 @ Stripe
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Account Executive, Startup Platforms (Existing Business) - 2026-03-13 @ Stripe
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Account Executive, Startup SaaS Platforms - Existing Business - 2026-03-13 @ Stripe
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Android Engineer, Terminal OS Platform - 2026-03-13 @ Stripe
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Backend Engineer, Developer Experience & Product Platform  - 2026-03-13 @ Stripe
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Engineering Manager, Machine Learning Platform - 2026-03-13 @ Stripe
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Full Stack Engineer, Developer Experience & Product Platform - 2026-03-13 @ Stripe
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Full Stack Engineer, Developer Experience & Product Platform - 2026-03-13 @ Stripe
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Full Stack Engineer, Web Presence and Platform - 2026-03-13 @ Stripe
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Head of Industry Pursuits, Enterprise Platforms (New Business) - 2026-03-13 @ Stripe
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Product Manager, Compliance Platform - 2026-03-13 @ Stripe
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Product Manager, Compliance Platform - 2026-03-13 @ Stripe
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Product Manager, Payment Records Platform - 2026-03-13 @ Stripe
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Product Manager, Stripe Infrastructure - 2026-03-13 @ Stripe
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Sales Manager, Platforms (Existing Business) - 2026-03-13 @ Stripe
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Sales Manager, Platforms (Existing Business) - 2026-03-13 @ Stripe
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Sales Manager, Startup SaaS Platforms - German or French Speaking - 2026-03-13 @ Stripe
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Senior Staff Software Engineer,  Developer Infrastructure  - 2026-03-13 @ Stripe
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Software Engineer, Machine Learning Infrastructure - 2026-03-13 @ Stripe
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Software Engineer, Machine Learning Infrastructure - 2026-03-13 @ Stripe
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Software Engineer, Machine Learning Infrastructure - 2026-03-13 @ Stripe
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Software Engineer, Product Security Data Platforms - 2026-03-13 @ Stripe
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Software Engineer, Secrets Infrastructure - 2026-03-13 @ Stripe
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Solutions Architect, Platforms - UKI - 2026-03-13 @ Stripe
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Staff Infrastructure Engineer, Privy - 2026-03-13 @ Stripe
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Staff Product Manager, Stripe Apps and Extensibility Platform - 2026-03-13 @ Stripe
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Data Platform Product Lead - 2026-03-13 @ Airbnb
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Engineering Manager, Cloud Networking (Brazil) - 2026-03-13 @ Airbnb
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Engineering Manager, Network Infrastructure (Cloud) - 2026-03-13 @ Airbnb
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Engineering Manager, Trust Platform - 2026-03-13 @ Airbnb
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Platform Lead - Agent Products, Community Support  - 2026-03-13 @ Airbnb
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Product Manager, API Platform - 2026-03-13 @ Airbnb
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Senior Data Scientist, Platform (Integrity) - 2026-03-13 @ Airbnb
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Senior Frontend Engineer, GraphQL & Networking Platform - 2026-03-13 @ Airbnb
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Senior Software Engineer, Aircover Claim Platform - 2026-03-13 @ Airbnb
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Senior Software Engineer, Cloud Infrastructure AI  - 2026-03-13 @ Airbnb
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Senior Software Engineer, Data Infrastructure - 2026-03-13 @ Airbnb
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Senior Software Engineer, Tax Platform - 2026-03-13 @ Airbnb
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Senior Software Engineer,Trust Platform  - 2026-03-13 @ Airbnb
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Software Engineer, Infrastructure - 2026-03-13 @ Airbnb
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Staff Platform Manager, Community Experience Platforms - 2026-03-13 @ Airbnb
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Staff Platform Manager- Payments, Evaluations and Automation - 2026-03-13 @ Airbnb
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Staff Platform Manager- Suspensions, Appeals & Enforcements - 2026-03-13 @ Airbnb
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Staff Software Engineer, Android Platform - 2026-03-13 @ Airbnb
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Staff Software Engineer, Network Infrastructure - 2026-03-13 @ Airbnb
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Associate Manager - Client Platform - 2026-03-13 @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Business Operations Senior Associate / Manager, Platform - 2026-03-13 @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Data Scientist II - Platform - 2026-03-13 @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Engineering Manager, Blockchain Platform - 2026-03-13 @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Engineering Manager - Payments Platform - 2026-03-13 @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Product Manager II - Core Infrastructure - 2026-03-13 @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Product Manager II - Platform Staking - 2026-03-13 @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Senior Data Scientist - Platform - 2026-03-13 @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Senior Engineering Manager - Data Platform - 2026-03-13 @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Senior Machine Learning Platform Engineer (Platform) - 2026-03-13 @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Senior Platform Operations Manager - 2026-03-13 @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Senior Product Manager, GRC Platforms - 2026-03-13 @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Senior Site Reliability Engineer, Identity Platform - 2026-03-13 @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Senior Site Reliability Engineer, IT Infrastructure - 2026-03-13 @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Senior Software Engineer (AI Platform - AI Acceleration) - 2026-03-13 @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Senior Software Engineer,  Backend - Blockchain Platform (Blockchain Nodes)  - 2026-03-13 @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Senior Software Engineer, Backend - Blockchain Platform (Staking Data) - 2026-03-13 @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Senior Software Engineer, Backend - Blockchain Platform (Staking Validators) - 2026-03-13 @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Senior Software Engineer, Backend (Platform - Financial Eng)  - 2026-03-13 @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Senior Software Engineer, Backend - Platform (FinHub - Ledger) - 2026-03-13 @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Senior Software Engineer, Backend - Platform (Payments) - 2026-03-13 @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Senior Software Engineer - Consumer Engineering Test Infrastructure - 2026-03-13 @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Senior Software Engineer - Infrastructure Enablement - 2026-03-13 @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Senior Software Engineer, Infrastructure - Platform Compute - 2026-03-13 @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Senior Software Engineer (Platform- Account Platform) - 2026-03-13 @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Senior Software Engineer (Platform - AI Acceleration)  - 2026-03-13 @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Senior Software Engineer, SRE - 2026-03-13 @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Senior Staff Software Engineer, Backend - Platform (Core Automation) - 2026-03-13 @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Senior Staff Software Engineer, Backend - Risk Platform - 2026-03-13 @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Senior Staff Software Engineer - Blockchain Platform  (Asset Data) - 2026-03-13 @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Senior Staff Software Engineer, Data Platform - 2026-03-13 @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Site Reliability Engineer, IT Infrastructure - 2026-03-13 @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Software Engineering Manager - Cloud Provisioning - 2026-03-13 @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Software Engineer - Salesforce Platform (EAA) - 2026-03-13 @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Staff Machine Learning Engineer - Platform (Core Automation) - 2026-03-13 @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Staff Software Engineer, Backend - Platform (FinHub - Ledger) - 2026-03-13 @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Staff Software Engineer, Frontend (Institutional - Prime UI Platform) - 2026-03-13 @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Staff Software Engineer, Infrastructure - Platform Compute - 2026-03-13 @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Staff Software Engineer (Platform - Product Foundations) - 2026-03-13 @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+------------------------------------------------
+🔍 Checking Job: Staff Software Engineer, Security Platform - 2026-03-13 @ Coinbase
+📊 Match Score: 0.000
+🤖 Decision: SKIP
+
+✅ Database updated successfully
+📁 Application history saved: applications_1.json
+
+🎯 AI Job Processing Completed
+

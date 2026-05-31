@@ -1,0 +1,121 @@
+DevOps Skills
+
+AWS
+Azure
+Terraform
+Kubernetes
+Docker
+Helm
+CI/CD
+Jenkins
+GitHub Actions
+ArgoCD
+Linux
+Python
+Shell scripting
+Prometheus
+Grafana
+Infrastructure as Code
+Cloud Infrastructure
+Site Reliability Engineering
+
+DevOps Engineer with strong experience in cloud infrastructure, CI/CD pipelines, and automation.
+
+TECHNICAL SKILLS:
+- AWS (EC2, S3, IAM, VPC, CloudWatch)
+- Kubernetes (EKS), Docker
+- Terraform (Infrastructure as Code)
+- CI/CD (Jenkins, GitHub Actions, GitLab CI)
+- Monitoring: Prometheus, Grafana
+- Linux, Bash scripting, Python
+
+EXPERIENCE:
+- Designed and implemented CI/CD pipelines using Jenkins and GitHub Actions
+- Deployed containerized applications using Docker and Kubernetes (EKS)
+- Automated infrastructure provisioning using Terraform
+- Implemented monitoring and alerting using Prometheus and Grafana
+- Managed AWS cloud infrastructure and production environments
+
+Kurva Rambabu
+DevOps Engineer
+(571) 668-0067 | kurvarambabu98@gmail.com | Jersey City, NJ| LinkedIn
+SUMMARY
+DevOps Engineer with over 4 years of experience designing, automating, and supporting cloud-native infrastructure on AWS and Azure to
+accelerate software delivery and improve platform reliability. Strong background in Infrastructure as Code, CI/CD pipelines, GitOps
+workflows, and Kubernetes orchestration. Proven ability to improve deployment speed, system stability, and security posture across
+enterprise environments. Experienced in DevSecOps practices, centralized monitoring, and automated compliance frameworks.
+Collaborative team player in Agile Scrum environments, focused on continuous improvement and operational excellence. Skilled in Python,
+Bash, Terraform, Jenkins, ArgoCD, and containerized microservices architectures. Known for translating business requirements into scalable,
+resilient, and cost-efficient cloud platforms.
+SKILLS
+Cloud Platforms: AWS (EC2, S3, IAM, VPC, ELB, Auto Scaling, Route 53, CloudWatch, SQS, SNS, DMS), Microsoft Azure (AKS, ACR, Azure AD,
+Blob Storage, Azure SQL, Cosmos DB, Data Factory, Databricks)
+CI/CD & Automation: Jenkins, GitLab CI, Bitbucket Pipelines, ArgoCD, GitOps, Terraform, Ansible, CloudFormation, Pulumi
+Containers & Orchestration: Docker, Kubernetes, Helm, Docker Swarm
+Monitoring & Observability: Prometheus, Grafana, Splunk, ELK Stack, Datadog, Dynatrace
+Security & DevSecOps: HashiCorp Vault, Secrets Management, IAM, RBAC, Compliance Automation
+Languages & Scripting: Python, Bash, PowerShell, YAML, Java, Golang
+Version Control & Build: Git, GitHub, Bitbucket, Maven, Gradle
+Databases: PostgreSQL, MySQL, SQL Server, MongoDB, Cassandra
+Methodologies: Agile, Scrum, SDLC, TDD, CI/CD, Infrastructure as Code
+EDUCATION
+Master of Science in Data Science Sep 2023 – May 2025
+Saint Peter's University, Jersey City, NJ
+Bachelor of Computer science engineering Aug 2018 – May 2022
+Malla Reddy College of engineering and technology, Hyderabad
+WORK EXPERIENCE
+Principal Financial, USA | DevOps Engineer OCT 2024 – Present
+ Rebuilt cloud environment provisioning using Terraform and Ansible, replacing manual setup with automated workflows and enabling
+consistent deployments across development, staging, and production platforms.
+ Created end-to-end Jenkins pipelines automating build, test, and release for dozens of services, helping teams move from bi-weekly to
+near-daily deployments with fewer production issues.
+ Established GitOps standards with ArgoCD and Kubernetes, giving teams controlled, repeatable, and fully traceable deployments across
+multi-cluster environments supporting secure and compliant delivery.
+ Rolled out enterprise secrets governance with HashiCorp Vault, centralizing credentials, automating rotation, and strengthening access
+controls across container and cloud platforms.
+ Built observability platforms with Prometheus, Grafana, and Splunk that reduced incident investigation time by roughly 40% and
+improved on-call response workflows.
+ Engineered distributed Cassandra platforms to support real-time analytics workloads with high throughput, fault tolerance, and
+horizontal scalability.
+ Collaborated with application teams to improve release reliability, automate environment handoffs, and embed DevOps best practices
+into everyday engineering workflows.
+KPIT, India | DevOps Engineer Aug 2020 – Jul 2023
+ Introduced Infrastructure-as-Code standards using Terraform and CloudFormation, reducing manual provisioning effort by about 60%
+and improving consistency across development, QA, and production environments.
+ Designed resilient AWS platforms that handled traffic spikes without service interruption using Auto Scaling, load balancing, and
+managed database services.
+ Implemented Kubernetes deployment automation with ArgoCD, cutting deployment failures by nearly 50% and improving release
+confidence across application teams.
+ Built centralized logging pipelines that unified application and system logs, giving engineers real-time insight into failures and
+performance bottlenecks.
+ Strengthened CI quality gates by embedding test automation into Maven and Gradle pipelines, improving overall software reliability
+and release stability.
+ Supported Agile Scrum teams by automating repetitive tasks and improving pipeline reliability to keep delivery schedules predictable.
+ Partnered with product and engineering teams to modernize delivery processes, aligning DevOps practices with business and
+technology goals.
+
+
+
+
+DevOps Technologies
+AWS
+Terraform
+Kubernetes
+Docker
+Helm
+GitOps
+ArgoCD
+CI/CD pipelines
+Infrastructure as Code
+Linux administration
+Cloud Infrastructure
+Microservices
+Observability
+Prometheus
+Grafana
+Splunk
+ELK stack
+Python automation
+Shell scripting
+Platform Engineering
+Site Reliability Engineering

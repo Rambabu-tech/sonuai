@@ -1,0 +1,79 @@
+Certainly! Below is a revised version of the resume tailored to better match the job description for the Site Reliability Engineer (SRE) position at Pave Bank. 
+
+---
+
+**[Your Name]**  
+[Your Address]  
+[City, State, Zip]  
+[Your Email]  
+[Your Phone Number]  
+[LinkedIn Profile]  
+
+---
+
+**PROFESSIONAL SUMMARY**  
+Results-driven Site Reliability Engineer with extensive experience in building and maintaining scalable, high-availability systems. Proven track record in automating operations, enhancing system performance, and ensuring reliability across diverse environments. Strong collaborator with a focus on security, compliance, and operational excellence in the banking and financial services sector.
+
+---
+
+**TECHNICAL SKILLS**  
+- **Programming/Scripting:** Proficient in Go, Python, and Bash for automation and operational tasks.  
+- **Cloud Infrastructure:** Hands-on experience with Google Cloud Platform (GCP) and AWS.  
+- **Containerization & Orchestration:** Familiar with Docker and Kubernetes for microservices orchestration.  
+- **Infrastructure as Code (IaC):** Experienced with Terraform and Cloud Deployment Manager for automated infrastructure management.  
+- **Continuous Delivery:** Knowledgeable in GitOps practices using FluxCD and ArgoCD for deployment pipelines.  
+- **Monitoring & Observability:** Skilled in setting up Prometheus, Grafana, and ELK stack for logging, metrics, and alerting.  
+- **Distributed Systems:** Solid understanding of microservices architecture and reliability patterns, including failover strategies and disaster recovery.  
+- **Database Management:** Experience with database operations, backup strategies, and secure operations.
+
+---
+
+**PROFESSIONAL EXPERIENCE**  
+
+**Site Reliability Engineer**  
+[Your Previous Company] - [City, State]  
+[Month, Year] – Present  
+- Monitored, maintained, and improved the reliability, availability, and performance of production systems, achieving a 99.9% uptime.  
+- Built and maintained infrastructure as code (IaC) using Terraform, enabling automated deployments and scaling of services.  
+- Responded to incidents, performed root-cause analysis, and led postmortems to apply lessons learned, reducing incident recurrence by 30%.  
+- Implemented operational best practices, including observability, logging, metrics, and capacity planning, enhancing system reliability.  
+- Collaborated with cross-functional teams (Engineering, Product, Security, and Operations) to ensure compliance with security and operational standards.  
+- Supported service scaling and microservices orchestration, optimizing resource utilization and performance.
+
+**DevOps Engineer**  
+[Your Previous Company] - [City, State]  
+[Month, Year] – [Month, Year]  
+- Developed automation scripts in Python and Bash to streamline operational tasks and improve efficiency.  
+- Managed cloud infrastructure on GCP, ensuring compliance with industry standards and best practices.  
+- Set up monitoring and alerting systems using Prometheus and Grafana, improving incident response times by 40%.  
+- Documented operational runbooks and system architecture to support knowledge sharing and compliance efforts.
+
+---
+
+**EDUCATION**  
+**Bachelor of Science in Computer Science**  
+[Your University] - [City, State]  
+[Month, Year]  
+
+---
+
+**CERTIFICATIONS**  
+- Google Cloud Professional Cloud Architect  
+- Certified Kubernetes Administrator (CKA)  
+- AWS Certified Solutions Architect  
+
+---
+
+**ADDITIONAL SKILLS**  
+- Strong ownership mindset with a proactive approach to system reliability.  
+- Excellent communication skills, capable of coordinating across technical and non-technical stakeholders.  
+- Comfortable working in high-pressure environments and responding to incidents effectively.
+
+---
+
+**REFERENCES**  
+Available upon request.
+
+---
+
+Feel free to customize any sections further or add specific achievements and metrics that reflect your experience.

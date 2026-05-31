@@ -1,0 +1,58 @@
+[
+  {
+    "title": "DevOps Engineer",
+    "company": "LinkedIn",
+    "score": 0.864,
+    "status": "APPLIED",
+    "url": "https://www.linkedin.com/jobs/view/123456"
+  },
+  {
+    "title": "Infrastructure Engineer, Privy",
+    "company": "Stripe",
+    "score": 0.353,
+    "status": "APPLIED",
+    "url": "https://boards.greenhouse.io/stripe/jobs/7462961"
+  },
+  {
+    "title": "Audiovisual Infrastructure Engineer",
+    "company": "Airbnb",
+    "score": 0.372,
+    "status": "APPLIED",
+    "url": "https://boards.greenhouse.io/airbnb/jobs/7917632"
+  },
+  {
+    "title": "Senior Staff Machine Learning Engineer, Growth Platform Engineering",
+    "company": "Airbnb",
+    "score": 0.245,
+    "status": "APPLIED",
+    "url": "https://boards.greenhouse.io/airbnb/jobs/7747259"
+  },
+  {
+    "title": "Systems Engineer, BizTech(Python, LLM, GenAI, MCP)",
+    "company": "Airbnb",
+    "score": 0.294,
+    "status": "APPLIED",
+    "url": "https://boards.greenhouse.io/airbnb/jobs/7902817"
+  },
+  {
+    "title": "Site Reliability Engineer",
+    "company": "Databricks",
+    "score": 0.484,
+    "status": "APPLIED",
+    "url": "https://boards.greenhouse.io/databricks/jobs/8493168002"
+  },
+  {
+    "title": "Data Platform Engineer",
+    "company": "Figma",
+    "score": 0.483,
+    "status": "FAILED",
+    "url": "https://boards.greenhouse.io/figma/jobs/5840332004"
+  },
+  {
+    "title": "Site Reliability Engineer",
+    "company": "RBC",
+    "score": 0.54,
+    "status": "APPLIED",
+    "url": "https://remoteOK.com/remote-jobs/remote-site-reliability-engineer-rbc-1132479"
+  }
+]
