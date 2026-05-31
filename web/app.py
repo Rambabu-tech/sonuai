@@ -1,9 +1,7 @@
 import os
 import json
 import sys
-
-from redis import Redis
-from rq import Queue
+import subprocess
 
 from flask import Flask, render_template, redirect, request
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
@@ -16,14 +14,12 @@ from web.models import User
 # ✅ FIX PATH
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-# ✅ REDIS
-redis_conn = Redis()
-queue = Queue("jobs", connection=redis_conn)
-
-# ✅ FLASK APP
+# 🚀 FLASK APP
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "secret")
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.db"
+
+# ✅ IMPORTANT → Use same DB as main.py
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///site.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db.init_app(app)
@@ -55,21 +51,19 @@ def dashboard():
     return render_template("dashboard.html", jobs=jobs)
 
 
-# 🚀 RUN JOBS (FIXED)
+# 🚀 RUN JOBS (FINAL FIX)
 @app.route("/run")
 @login_required
 def run_jobs():
 
-    # ✅ IMPORT INSIDE (fix circular import)
-    from worker_tasks import process_user_jobs
+    try:
+        subprocess.Popen([
+            "python", "main.py", str(current_user.id)
+        ])
+    except Exception as e:
+        return f"❌ Error starting job: {str(e)}"
 
-    # ❌ REMOVE subprocess → VERY IMPORTANT
-    # subprocess.Popen(["python", "main.py", str(current_user.id)])
-
-    # ✅ ONLY QUEUE
-    queue.enqueue(process_user_jobs, current_user.id)
-
-    return "🚀 Job started in background!"
+    return "🚀 AI job started!"
 
 
 # 🚀 UPLOAD RESUME
@@ -77,7 +71,7 @@ def run_jobs():
 @login_required
 def upload():
 
-    file = request.files["resume"]
+    file = request.files.get("resume")
 
     if not file:
         return redirect("/")
