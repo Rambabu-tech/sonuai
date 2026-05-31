@@ -1,8 +1,28 @@
 credentials.json
 mailbot/token.json
-jobai_env/
+# Python
 __pycache__/
 *.pyc
+
+# Env
+jobai_env/
 .env
+
+# Database
 *.db
+
+# Uploads
 uploads/
+
+# Logs
+*.log
+cron.log
+
+# ML Models
+hf_cache/
+*.bin
+*.onnx
+*.safetensors
+
+# OS
+.DS_Store
