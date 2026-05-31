@@ -18,11 +18,15 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "secret")
 
-# ✅ IMPORTANT → Use same DB as main.py
+# ✅ SAME DB AS MAIN
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///site.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db.init_app(app)
+
+# ✅ 🔥 FIX: CREATE TABLES (IMPORTANT FOR RENDER)
+with app.app_context():
+    db.create_all()
 
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
@@ -51,14 +55,15 @@ def dashboard():
     return render_template("dashboard.html", jobs=jobs)
 
 
-# 🚀 RUN JOBS (FINAL FIX)
+# 🚀 RUN JOBS (SAFE VERSION FOR RENDER)
 @app.route("/run")
 @login_required
 def run_jobs():
 
     try:
+        # ✅ Use python3 for Render
         subprocess.Popen([
-            "python", "main.py", str(current_user.id)
+            "python3", "main.py", str(current_user.id)
         ])
     except Exception as e:
         return f"❌ Error starting job: {str(e)}"
