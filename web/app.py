@@ -7,25 +7,16 @@ from flask_login import LoginManager, login_user, login_required, logout_user, c
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 
-from redis import Redis
-from rq import Queue
-
 from extensions import db
 from web.models import User, JobApplication
 
-# ✅ PATH FIX
+# PATH FIX
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-# 🚀 REDIS (SAFE)
-redis_url = os.getenv("REDIS_URL", "redis://localhost:6379")
-redis_conn = Redis.from_url(redis_url)
-queue = Queue("jobs", connection=redis_conn)
-
-# 🚀 FLASK APP
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "secret")
 
-# ✅ DATABASE (Render safe)
+# DB
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv(
     "DATABASE_URL", "sqlite:///site.db"
 )
@@ -33,11 +24,11 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db.init_app(app)
 
-# 🔥 CREATE TABLES
+# CREATE TABLES
 with app.app_context():
     db.create_all()
 
-# 🚀 LOGIN
+# LOGIN
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
 
@@ -47,7 +38,7 @@ def load_user(user_id):
     return db.session.get(User, int(user_id))
 
 
-# 🚀 DASHBOARD
+# DASHBOARD
 @app.route("/")
 def dashboard():
 
@@ -67,19 +58,19 @@ def dashboard():
     return render_template("dashboard.html", jobs=jobs)
 
 
-# 🚀 RUN JOBS (QUEUE)
+# 🚀 RUN AI (FREE VERSION)
 @app.route("/run")
 @login_required
 def run_jobs():
 
-    from worker_tasks import process_user_jobs
+    from main import run_for_user
 
-    queue.enqueue(process_user_jobs, current_user.id)
+    run_for_user(current_user.id)
 
-    return "🚀 Job queued successfully!"
+    return redirect("/")
 
 
-# 🚀 UPLOAD
+# UPLOAD RESUME
 @app.route("/upload", methods=["POST"])
 @login_required
 def upload():
@@ -100,7 +91,7 @@ def upload():
     return redirect("/")
 
 
-# 🚀 LOGIN
+# LOGIN
 @app.route("/login", methods=["GET", "POST"])
 def login():
 
@@ -114,7 +105,7 @@ def login():
     return render_template("login.html")
 
 
-# 🚀 REGISTER
+# REGISTER
 @app.route("/register", methods=["GET", "POST"])
 def register():
 
@@ -131,7 +122,7 @@ def register():
     return render_template("register.html")
 
 
-# 🚀 LOGOUT
+# LOGOUT
 @app.route("/logout")
 @login_required
 def logout():

@@ -1,106 +1,134 @@
-import sys
 import os
 import json
-from dotenv import load_dotenv
+import sys
 
-from flask import Flask
+from flask import Flask, render_template, redirect, request
+from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
+
 from extensions import db
 from web.models import User, JobApplication
 
-from ai_engine.matcher import compute_similarity, decide_application
-from ai_engine.cover_letter import generate_cover_letter
-from apply.auto_apply import apply_to_job
-from job_sources import fetch_remoteok_jobs
+# PATH FIX
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-load_dotenv()
-os.environ["TOKENIZERS_PARALLELISM"] = "false"
+app = Flask(__name__)
+app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "secret")
+
+# DB
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv(
+    "DATABASE_URL", "sqlite:///site.db"
+)
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+db.init_app(app)
+
+# CREATE TABLES
+with app.app_context():
+    db.create_all()
+
+# LOGIN
+login_manager = LoginManager(app)
+login_manager.login_view = "login"
 
 
-def create_app():
-    app = Flask(__name__)
-
-    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv(
-        "DATABASE_URL", "sqlite:///site.db"
-    )
-    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-
-    db.init_app(app)
-
-    return app
+@login_manager.user_loader
+def load_user(user_id):
+    return db.session.get(User, int(user_id))
 
 
-def run_for_user(user_id):
+# DASHBOARD
+@app.route("/")
+def dashboard():
 
-    app = create_app()
+    if not current_user.is_authenticated:
+        return redirect("/login")
 
-    with app.app_context():
+    file = f"applications_{current_user.id}.json"
 
-        print(f"\n🚀 Running SonuAI for user {user_id}\n")
+    jobs = []
+    if os.path.exists(file):
+        try:
+            with open(file) as f:
+                jobs = json.load(f)
+        except:
+            jobs = []
 
-        user = db.session.get(User, user_id)
+    return render_template("dashboard.html", jobs=jobs)
 
-        if not user:
-            return
 
-        resume_path = user.resume_path or "uploads/default_resume.txt"
+# 🚀 RUN AI (FREE VERSION)
+@app.route("/run")
+@login_required
+def run_jobs():
 
-        if not os.path.exists(resume_path):
-            return
+    from main import run_for_user
 
-        with open(resume_path, "r", encoding="utf-8", errors="ignore") as f:
-            resume_content = f.read()
+    run_for_user(current_user.id)
 
-        jobs = fetch_remoteok_jobs()
+    return redirect("/")
 
-        results = []
 
-        for job in jobs:
+# UPLOAD RESUME
+@app.route("/upload", methods=["POST"])
+@login_required
+def upload():
 
-            title = job.get("title", "")
-            company = job.get("company", "")
-            description = job.get("description", "")
-            url = job.get("url", "")
+    file = request.files.get("resume")
 
-            score = compute_similarity(resume_content, description)
-            decision = decide_application(score)
+    if not file:
+        return redirect("/")
 
-            status = "SKIPPED"
+    os.makedirs("uploads", exist_ok=True)
 
-            if decision == "APPLY":
+    path = os.path.join("uploads", secure_filename(file.filename))
+    file.save(path)
 
-                try:
-                    cover_letter = generate_cover_letter(
-                        resume_content, title, description
-                    )
-                except:
-                    cover_letter = ""
+    current_user.resume_path = path
+    db.session.commit()
 
-                # ⚠️ Render safe (no Selenium)
-                if os.getenv("RENDER") == "true":
-                    applied = False
-                else:
-                    applied = apply_to_job(url, resume_path, cover_letter)
+    return redirect("/")
 
-                status = "APPLIED" if applied else "FAILED"
 
-            db.session.add(JobApplication(
-                user_id=user.id,
-                job_title=title,
-                job_url=url,
-                company=company,
-                score=score,
-                decision=decision
-            ))
+# LOGIN
+@app.route("/login", methods=["GET", "POST"])
+def login():
 
-            results.append({
-                "title": title,
-                "company": company,
-                "score": round(score, 3),
-                "status": status,
-                "url": url
-            })
+    if request.method == "POST":
+        user = User.query.filter_by(email=request.form["email"]).first()
 
+        if user and check_password_hash(user.password_hash, request.form["password"]):
+            login_user(user)
+            return redirect("/")
+
+    return render_template("login.html")
+
+
+# REGISTER
+@app.route("/register", methods=["GET", "POST"])
+def register():
+
+    if request.method == "POST":
+        user = User(
+            email=request.form["email"],
+            password_hash=generate_password_hash(request.form["password"])
+        )
+        db.session.add(user)
         db.session.commit()
 
-        with open(f"applications_{user.id}.json", "w") as f:
-            json.dump(results, f, indent=2)
+        return redirect("/login")
+
+    return render_template("register.html")
+
+
+# LOGOUT
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect("/login")
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
