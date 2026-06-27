@@ -1,5 +1,4 @@
 import os
-import json
 import sys
 
 from flask import Flask, render_template, redirect, request
@@ -17,10 +16,10 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "secret")
 
 # DB
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv(
-    "DATABASE_URL", "sqlite:///site.db"
-)
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+BASE_DIR = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+db_path = os.path.join(BASE_DIR, "instance", "site.db")
+
+app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_path}"
 
 db.init_app(app)
 
@@ -38,27 +37,20 @@ def load_user(user_id):
     return db.session.get(User, int(user_id))
 
 
-# DASHBOARD
+# 🚀 DASHBOARD (UPDATED)
 @app.route("/")
+@login_required
 def dashboard():
 
-    if not current_user.is_authenticated:
-        return redirect("/login")
-
-    file = f"applications_{current_user.id}.json"
-
-    jobs = []
-    if os.path.exists(file):
-        try:
-            with open(file) as f:
-                jobs = json.load(f)
-        except:
-            jobs = []
+    # 🔥 GET JOBS FROM DB (NOT JSON)
+    jobs = JobApplication.query.filter_by(
+        user_id=current_user.id
+    ).order_by(JobApplication.created_at.desc()).all()
 
     return render_template("dashboard.html", jobs=jobs)
 
 
-# 🚀 RUN AI (FREE VERSION)
+# 🚀 RUN AI
 @app.route("/run")
 @login_required
 def run_jobs():
@@ -70,7 +62,7 @@ def run_jobs():
     return redirect("/")
 
 
-# UPLOAD RESUME
+# 📄 UPLOAD RESUME
 @app.route("/upload", methods=["POST"])
 @login_required
 def upload():
@@ -91,7 +83,7 @@ def upload():
     return redirect("/")
 
 
-# LOGIN
+# 🔐 LOGIN
 @app.route("/login", methods=["GET", "POST"])
 def login():
 
@@ -105,15 +97,22 @@ def login():
     return render_template("login.html")
 
 
-# REGISTER
+# 🆕 REGISTER
 @app.route("/register", methods=["GET", "POST"])
 def register():
 
     if request.method == "POST":
+
+        existing = User.query.filter_by(email=request.form["email"]).first()
+
+        if existing:
+            return "User already exists"
+
         user = User(
             email=request.form["email"],
             password_hash=generate_password_hash(request.form["password"])
         )
+
         db.session.add(user)
         db.session.commit()
 
@@ -122,7 +121,7 @@ def register():
     return render_template("register.html")
 
 
-# LOGOUT
+# 🚪 LOGOUT
 @app.route("/logout")
 @login_required
 def logout():

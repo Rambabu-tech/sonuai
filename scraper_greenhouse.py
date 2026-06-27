@@ -3,10 +3,6 @@ import requests
 from datetime import date
 from bs4 import BeautifulSoup
 
-# -------------------------------------------------
-# GREENHOUSE BOARDS
-# -------------------------------------------------
-
 GREENHOUSE_COMPANIES = {
     "stripe": "Stripe",
     "airbnb": "Airbnb",
@@ -20,116 +16,62 @@ GREENHOUSE_COMPANIES = {
     "doordash": "DoorDash"
 }
 
-# -------------------------------------------------
-# DEVOPS ROLE KEYWORDS
-# -------------------------------------------------
-
-DEVOPS_KEYWORDS = [
-    "devops",
-    "site reliability",
-    "sre",
-    "platform engineer",
-    "cloud engineer",
-    "infrastructure engineer",
-    "production engineer",
-    "kubernetes engineer",
-    "build engineer",
-    "release engineer",
-    "systems engineer"
-]
-
-# -------------------------------------------------
-# EXCLUDE NON ENGINEERING ROLES
-# -------------------------------------------------
-
 EXCLUDE_KEYWORDS = [
-    "manager",
-    "director",
-    "product",
-    "sales",
-    "account",
-    "marketing",
-    "customer",
-    "business",
-    "technical writer",
-    "support",
-    "recruiter"
+    "sales", "marketing", "recruiter",
+    "hr", "assistant", "coordinator",
+    "customer support", "writer"
 ]
 
-# -------------------------------------------------
-# FILTER FUNCTIONS
-# -------------------------------------------------
-
-def is_devops_job(title):
-    """
-    Determine if job title is DevOps related
-    """
-
+def is_valid_job(title):
     title = title.lower()
-
-    if not any(k in title for k in DEVOPS_KEYWORDS):
-        return False
-
     if any(x in title for x in EXCLUDE_KEYWORDS):
         return False
-
     return True
 
 
-# -------------------------------------------------
-# FETCH FULL JOB DESCRIPTION
-# -------------------------------------------------
-
 def get_full_job_description(job_url):
-    """
-    Scrape full job description from job page
-    """
-
     try:
-
         page = requests.get(job_url, timeout=10)
-
         if page.status_code != 200:
             return ""
 
         soup = BeautifulSoup(page.text, "html.parser")
+        return soup.get_text(" ", strip=True)[:5000]
 
-        text = soup.get_text(" ", strip=True)
-
-        return text[:8000]  # limit size
-
-    except Exception:
+    except Exception as e:
+        print("⚠️ Description fetch error:", e)
         return ""
 
 
-# -------------------------------------------------
-# SCRAPER
-# -------------------------------------------------
+# ------------------------------
+# MAIN
+# ------------------------------
 
 today = date.today().isoformat()
-
 jobs = []
-
 seen_jobs = set()
 
-print("🔎 Scraping Greenhouse job boards...\n")
+print("🔎 Scraping ALL jobs...\n")
 
 for board, company_name in GREENHOUSE_COMPANIES.items():
+
+    print(f"➡️ Fetching {company_name}...")
 
     api_url = f"https://boards-api.greenhouse.io/v1/boards/{board}/jobs"
 
     try:
-
         response = requests.get(api_url, timeout=10)
 
+        print(f"   Status Code: {response.status_code}")
+
         if response.status_code != 200:
-            print(f"❌ API error for {company_name}")
+            print(f"❌ Failed for {company_name}")
             continue
 
         data = response.json()
 
     except Exception as e:
-        print(f"❌ Request failed for {company_name}: {e}")
+        print(f"❌ Error fetching {company_name}: {e}")
         continue
 
     company_count = 0
@@ -138,7 +80,7 @@ for board, company_name in GREENHOUSE_COMPANIES.items():
 
         title = job.get("title", "")
 
-        if not is_devops_job(title):
+        if not is_valid_job(title):
             continue
 
         job_id = job.get("id")
@@ -150,7 +92,8 @@ for board, company_name in GREENHOUSE_COMPANIES.items():
 
         job_url = f"https://boards.greenhouse.io/{board}/jobs/{job_id}"
 
-        # Fetch full description
+        print(f"   🔹 Found: {title}")
+
         description = get_full_job_description(job_url)
 
         jobs.append({
@@ -158,23 +101,18 @@ for board, company_name in GREENHOUSE_COMPANIES.items():
             "company": company_name,
             "description": description,
             "url": job_url,
-            "job_id": job_id,
-            "board": board,
             "portal": "greenhouse",
             "date_scraped": today
         })
 
         company_count += 1
 
-    print(f"✅ {company_name}: {company_count} DevOps jobs found")
+    print(f"✅ {company_name}: {company_count} jobs\n")
 
 
-# -------------------------------------------------
-# SAVE RESULTS
-# -------------------------------------------------
-
+# SAVE
 with open("jobs.json", "w") as f:
     json.dump(jobs, f, indent=2)
 
-print("\n🎯 Total DevOps jobs saved:", len(jobs))
+print("\n🎯 Total jobs saved:", len(jobs))
 print("📁 Saved to jobs.json")

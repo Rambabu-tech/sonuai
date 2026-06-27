@@ -1,134 +1,225 @@
-import os
-import json
 import sys
+import os
+import time
+from dotenv import load_dotenv
 
-from flask import Flask, render_template, redirect, request
-from flask_login import LoginManager, login_user, login_required, logout_user, current_user
-from werkzeug.security import generate_password_hash, check_password_hash
-from werkzeug.utils import secure_filename
-
+from flask import Flask
 from extensions import db
 from web.models import User, JobApplication
 
-# PATH FIX
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from ai_engine.matcher import compute_similarity, decide_application
+from ai_engine.cover_letter import generate_cover_letter
+from ai_engine.skill_extractor import extract_skills
+from ai_engine.resume_parser import read_resume
+from ai_engine.role_detector import detect_role
 
-app = Flask(__name__)
-app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "secret")
-
-# DB
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv(
-    "DATABASE_URL", "sqlite:///site.db"
-)
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-
-db.init_app(app)
-
-# CREATE TABLES
-with app.app_context():
-    db.create_all()
-
-# LOGIN
-login_manager = LoginManager(app)
-login_manager.login_view = "login"
+from job_sources import fetch_all_jobs
+from apply.auto_apply import apply_to_job  # ✅ IMPORTANT
 
 
-@login_manager.user_loader
-def load_user(user_id):
-    return db.session.get(User, int(user_id))
+# ✅ ENV
+load_dotenv()
+print("🔥 KEY:", os.getenv("OPENAI_API_KEY")[:15])
 
 
-# DASHBOARD
-@app.route("/")
-def dashboard():
+def create_app():
+    app = Flask(__name__)
 
-    if not current_user.is_authenticated:
-        return redirect("/login")
+    BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+    db_path = os.path.join(BASE_DIR, "instance", "site.db")
 
-    file = f"applications_{current_user.id}.json"
+    app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_path}"
+    db.init_app(app)
 
-    jobs = []
-    if os.path.exists(file):
-        try:
-            with open(file) as f:
-                jobs = json.load(f)
-        except:
-            jobs = []
-
-    return render_template("dashboard.html", jobs=jobs)
+    return app
 
 
-# 🚀 RUN AI (FREE VERSION)
-@app.route("/run")
-@login_required
-def run_jobs():
+def run_for_user(user_id):
 
-    from main import run_for_user
+    app = create_app()
 
-    run_for_user(current_user.id)
+    with app.app_context():
 
-    return redirect("/")
+        print(f"\n🚀 Running SonuAI for user {user_id}\n")
+
+        user = db.session.get(User, user_id)
+
+        if not user:
+            print("❌ User not found")
+            return
+
+        resume_path = user.resume_path or "uploads/default_resume.txt"
+
+        if not os.path.exists(resume_path):
+            print("❌ Resume missing")
+            return
+
+        # ✅ READ RESUME
+        resume_content = read_resume(resume_path)[:2000]
+        print("📄 Resume preview:", resume_content[:200])
+
+        # ✅ EXTRACT SKILLS
+        skills = extract_skills(resume_content)
+        skills = [s.lower().strip() for s in skills if len(s) < 30]
+
+        if not skills:
+            skills = ["software", "developer", "engineer"]
+
+        print("🧠 Skills:", skills[:15])
+
+        # ✅ DETECT ROLE (ONLY ONCE — FIX)
+        roles = detect_role(resume_content)
+        print("🎯 Detected roles:", roles)
+
+        # 🚀 FETCH JOBS
+        jobs = fetch_all_jobs()
+        print(f"🔎 Jobs fetched: {len(jobs)}")
+
+        jobs = [j for j in jobs if j.get("title") and j.get("description")]
+
+        # ✅ PRIORITIZE BETTER JOBS
+        jobs = sorted(jobs, key=lambda j: len(j.get("description", "")), reverse=True)
+
+        seen = set()
+        unique_jobs = []
+
+        for j in jobs:
+            key = (j.get("title"), j.get("company"))
+            if key not in seen:
+                seen.add(key)
+                unique_jobs.append(j)
+
+        jobs = unique_jobs[:100]
 
 
-# UPLOAD RESUME
-@app.route("/upload", methods=["POST"])
-@login_required
-def upload():
+        processed = 0
+        matched = 0
 
-    file = request.files.get("resume")
+        # ✅ APPLY CONTROL (VERY IMPORTANT)
+        applied_count = 0
+        MAX_APPLY = 20
 
-    if not file:
-        return redirect("/")
+        for job in jobs:
 
-    os.makedirs("uploads", exist_ok=True)
+            if applied_count >= MAX_APPLY:
+                print("🛑 Apply limit reached")
+                break
 
-    path = os.path.join("uploads", secure_filename(file.filename))
-    file.save(path)
+            title = (job.get("title") or "").lower()
+            description = (job.get("description") or "").lower()
+            company = job.get("company", "")
+            url = job.get("url", "")
 
-    current_user.resume_path = path
-    db.session.commit()
+            print(f"\n👉 Checking: {title}")
 
-    return redirect("/")
+            # 🚀 STEP 1 — REMOVE BUSINESS ROLES
+            bad_roles = [
+                "account executive", "sales", "marketing",
+                "finance", "hr", "recruiter",
+                "operations", "customer", "business",
+                "manager", "director"
+            ]
 
+            if any(role in title for role in bad_roles):
+                print(f"❌ Skip business role: {title}")
+                continue
 
-# LOGIN
-@app.route("/login", methods=["GET", "POST"])
-def login():
+            # 🚀 STEP 2 — REQUIRE TECH ROLE
+            good_roles = [
+                "engineer", "developer", "software",
+                "backend", "frontend", "full stack",
+                "data", "machine learning",
+                "api", "cloud"
+            ]
 
-    if request.method == "POST":
-        user = User.query.filter_by(email=request.form["email"]).first()
+            if not any(role in title for role in good_roles):
+                print(f"⚠️ Not tech role: {title}")
+                continue
 
-        if user and check_password_hash(user.password_hash, request.form["password"]):
-            login_user(user)
-            return redirect("/")
+            # 🚀 STEP 3 — SKILL MATCH
+            skill_match_count = sum(
+                1 for skill in skills[:15] if skill in description
+            )
 
-    return render_template("login.html")
+            if skill_match_count < 1:
+                continue
 
+            # 🚀 STEP 4 — QUALITY FILTER
+            if len(description) < 200:
+                continue
 
-# REGISTER
-@app.route("/register", methods=["GET", "POST"])
-def register():
+            processed += 1
+            time.sleep(0.3)
 
-    if request.method == "POST":
-        user = User(
-            email=request.form["email"],
-            password_hash=generate_password_hash(request.form["password"])
-        )
-        db.session.add(user)
+            print(f"🔍 {title} @ {company}")
+            print(f"🧠 Skill matches: {skill_match_count}")
+
+            try:
+                # 🚀 STEP 5 — AI MATCH
+                score = compute_similarity(resume_content, description)
+
+                if score < 0.35:
+                    print(f"⛔ Low match ({score:.2f})")
+                    continue
+
+                matched += 1
+                decision = decide_application(score)
+
+                print(f"📊 Score: {score:.2f} → {decision}")
+
+                status = "SKIPPED"
+                cover_letter = ""
+
+                # 🚀 APPLY LOGIC (REAL FIX)
+                if decision == "APPLY":
+
+                    try:
+                        cover_letter = generate_cover_letter(
+                            resume_content,
+                            title,
+                            description[:1200]
+                        )
+                    except Exception as e:
+                        print("⚠️ Cover error:", e)
+
+                    # 🔥 REAL AUTO APPLY
+                    result = apply_to_job(url, resume_path, cover_letter)
+
+                    if result == "APPLIED":
+                        status = "APPLIED"
+                        applied_count += 1
+                    elif result == "FAILED":
+                        status = "FAILED"
+                    else:
+                        status = "MANUAL"
+
+                # 🚀 SAVE TO DB
+                db.session.add(JobApplication(
+                    user_id=user.id,
+                    job_title=title,
+                    job_url=url,
+                    company=company,
+                    score=score,
+                    decision=decision,
+                    status=status,
+                    cover_letter=cover_letter,
+                    source="multi-source"
+                ))
+
+            except Exception as e:
+                print("❌ Error:", e)
+
         db.session.commit()
 
-        return redirect("/login")
-
-    return render_template("register.html")
-
-
-# LOGOUT
-@app.route("/logout")
-@login_required
-def logout():
-    logout_user()
-    return redirect("/login")
+        print(f"\n🎯 Processed: {processed}")
+        print(f"✅ Matched: {matched}")
+        print(f"🚀 Applied: {applied_count}")
+        print("\n🎉 DONE\n")
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    if len(sys.argv) < 2:
+        print("❌ Provide user ID")
+        sys.exit(1)
+
+    run_for_user(int(sys.argv[1]))

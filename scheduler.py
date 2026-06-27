@@ -34,3 +34,9 @@ while True:
     run_all()
     print("⏳ Sleeping...\n")
     time.sleep(INTERVAL)
+
+    import os
+
+os.system("python scraper_greenhouse.py")
+os.system("python scraper_lever.py")
+os.system("python scraper_workday.py")

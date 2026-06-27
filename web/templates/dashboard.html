@@ -12,12 +12,10 @@ body {
     padding: 20px;
 }
 
-h1 {
-    color: #38bdf8;
-}
+h1 { color: #38bdf8; }
 
 .container {
-    max-width: 1000px;
+    max-width: 1100px;
     margin: auto;
 }
 
@@ -29,17 +27,18 @@ h1 {
 }
 
 button {
-    padding: 10px 15px;
+    padding: 8px 12px;
     border: none;
-    background: #38bdf8;
-    color: black;
     border-radius: 5px;
     cursor: pointer;
 }
 
-button:hover {
-    background: #0ea5e9;
-}
+.btn-primary { background: #38bdf8; color: black; }
+.btn-success { background: #22c55e; color: black; }
+.btn-warning { background: #eab308; color: black; }
+.btn-disabled { background: #475569; color: white; }
+
+button:hover { opacity: 0.9; }
 
 table {
     width: 100%;
@@ -56,9 +55,7 @@ th {
     color: #94a3b8;
 }
 
-.status {
-    font-weight: bold;
-}
+.status { font-weight: bold; }
 
 .applied { color: #22c55e; }
 .failed { color: #ef4444; }
@@ -82,11 +79,15 @@ th {
     border-radius: 8px;
 }
 
-.upload-box {
-    margin-top: 20px;
+.loading {
+    color: yellow;
+    display: none;
+}
+
+.filter-box {
+    margin-bottom: 15px;
 }
 </style>
-
 </head>
 
 <body>
@@ -98,18 +99,22 @@ th {
     <h1>⚡ SonuAI</h1>
 
     <div>
-        <button onclick="runJobs()">🚀 Run AI</button>
-        <a href="/logout"><button>Logout</button></a>
+        <button class="btn-primary" onclick="runJobs()">🚀 Run AI</button>
+        <a href="/logout"><button class="btn-primary">Logout</button></a>
     </div>
 </div>
 
 <p>AI that applies jobs for you</p>
 
+<div id="loading" class="loading">
+    ⏳ SonuAI is working... please wait
+</div>
+
 <!-- UPLOAD -->
-<div class="card upload-box">
+<div class="card">
     <form action="/upload" method="POST" enctype="multipart/form-data">
         <input type="file" name="resume" required>
-        <button type="submit">📄 Upload Resume</button>
+        <button class="btn-primary" type="submit">📄 Upload Resume</button>
     </form>
 
     {% if current_user.resume_path %}
@@ -119,14 +124,26 @@ th {
     {% endif %}
 </div>
 
+<!-- FILTER -->
+<div class="filter-box">
+    <form method="GET">
+        <select name="status" onchange="this.form.submit()">
+            <option value="">All Jobs</option>
+            <option value="APPLY">Apply</option>
+            <option value="REVIEW">Review</option>
+            <option value="SKIP">Skip</option>
+        </select>
+    </form>
+</div>
+
 <!-- STATS -->
 <div class="stats">
     <div class="stat">Total: {{jobs|length}}</div>
     <div class="stat">
-        Applied: {{jobs|selectattr('status','equalto','APPLIED')|list|length}}
+        Apply: {{jobs|selectattr('decision','equalto','APPLY')|list|length}}
     </div>
     <div class="stat">
-        Failed: {{jobs|selectattr('status','equalto','FAILED')|list|length}}
+        Review: {{jobs|selectattr('decision','equalto','REVIEW')|list|length}}
     </div>
 </div>
 
@@ -139,13 +156,21 @@ th {
 <th>Company</th>
 <th>Score</th>
 <th>Status</th>
+<th>Action</th>
 </tr>
 
 {% for job in jobs %}
 <tr>
-<td><a href="{{job.url}}" target="_blank" style="color:#38bdf8">{{job.title}}</a></td>
+
+<td>
+<a href="{{job.job_url}}" target="_blank" style="color:#38bdf8">
+{{job.job_title}}
+</a>
+</td>
+
 <td>{{job.company}}</td>
-<td>{{job.score}}</td>
+
+<td>{{"%.2f"|format(job.score or 0)}}</td>
 
 <td class="status 
     {% if job.status == 'APPLIED' %}applied{% endif %}
@@ -153,6 +178,22 @@ th {
     {% if job.status == 'SKIPPED' %}skipped{% endif %}
 ">
     {{job.status}}
+</td>
+
+<td>
+{% if job.decision == "APPLY" %}
+    <a href="{{job.job_url}}" target="_blank">
+        <button class="btn-success">Apply</button>
+    </a>
+
+{% elif job.decision == "REVIEW" %}
+    <a href="{{job.job_url}}" target="_blank">
+        <button class="btn-warning">Review</button>
+    </a>
+
+{% else %}
+    <button class="btn-disabled" disabled>Skip</button>
+{% endif %}
 </td>
 
 </tr>
@@ -165,9 +206,11 @@ th {
 
 <script>
 function runJobs(){
+    document.getElementById("loading").style.display = "block";
+
     fetch("/run")
     .then(()=>{
-        alert("🚀 SonuAI started applying jobs!");
+        location.reload();
     });
 }
 

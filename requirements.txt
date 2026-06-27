@@ -88,3 +88,12 @@ redis==5.0.4
 rq==1.16.2
 selenium==4.21.0
 webdriver-manager==4.0.1
+flask
+flask-login
+flask-sqlalchemy
+playwright
+selenium
+webdriver-manager
+openai
+psycopg2-binary
+python-dotenv
