@@ -1,7 +1,25 @@
-<!DOCTYPE html>
-<html>
-<body style="font-family: Arial; padding: 10px">
-  <h3>Job AI Bot</h3>
-  <p>Status: Running</p>
-</body>
-</html>
+function apply(){
+
+    document.getElementById("status").innerText = "⏳ Applying...";
+
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+
+        let url = tabs[0].url;
+
+        fetch("http://127.0.0.1:5000/apply-now-url", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({url: url})
+        })
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById("status").innerText =
+                "✅ Status: " + data.status;
+        })
+        .catch(err => {
+            document.getElementById("status").innerText =
+                "❌ Error connecting to SonuAI";
+        });
+
+    });
+}

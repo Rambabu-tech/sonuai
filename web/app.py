@@ -1,7 +1,7 @@
 import os
 import sys
 
-from flask import Flask, render_template, redirect, request
+from flask import Flask, render_template, redirect, request, jsonify
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
@@ -13,21 +13,25 @@ from web.models import User, JobApplication
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 app = Flask(__name__)
-app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "secret")
+app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "supersecret")
 
-# DB
+# ===============================
+# DATABASE CONFIG
+# ===============================
 BASE_DIR = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 db_path = os.path.join(BASE_DIR, "instance", "site.db")
 
 app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_path}"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db.init_app(app)
 
-# CREATE TABLES
 with app.app_context():
     db.create_all()
 
-# LOGIN
+# ===============================
+# LOGIN CONFIG
+# ===============================
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
 
@@ -37,20 +41,28 @@ def load_user(user_id):
     return db.session.get(User, int(user_id))
 
 
-# 🚀 DASHBOARD (UPDATED)
+# ===============================
+# DASHBOARD
+# ===============================
 @app.route("/")
 @login_required
 def dashboard():
 
-    # 🔥 GET JOBS FROM DB (NOT JSON)
-    jobs = JobApplication.query.filter_by(
-        user_id=current_user.id
-    ).order_by(JobApplication.created_at.desc()).all()
+    status_filter = request.args.get("status")
+
+    query = JobApplication.query.filter_by(user_id=current_user.id)
+
+    if status_filter:
+        query = query.filter_by(status=status_filter)
+
+    jobs = query.order_by(JobApplication.created_at.desc()).all()
 
     return render_template("dashboard.html", jobs=jobs)
 
 
-# 🚀 RUN AI
+# ===============================
+# RUN AI (MATCH JOBS)
+# ===============================
 @app.route("/run")
 @login_required
 def run_jobs():
@@ -59,10 +71,65 @@ def run_jobs():
 
     run_for_user(current_user.id)
 
-    return redirect("/")
+    return jsonify({"status": "started"})
 
 
-# 📄 UPLOAD RESUME
+# ===============================
+# RETRY FAILED JOB
+# ===============================
+@app.route("/retry/<int:job_id>")
+@login_required
+def retry_job(job_id):
+
+    job = JobApplication.query.get(job_id)
+
+    if not job:
+        return "Job not found"
+
+    job.status = "MATCHED"  # send back to queue
+    db.session.commit()
+
+    return jsonify({"status": "retry_started"})
+
+
+# ===============================
+# APPLY NOW (MANUAL TRIGGER)
+# ===============================
+@app.route("/apply-now/<int:job_id>")
+@login_required
+def apply_now(job_id):
+
+    job = JobApplication.query.get(job_id)
+
+    if not job:
+        return "Job not found"
+
+    from apply.apply_router import apply_to_job
+
+    result = apply_to_job(
+        job.job_url,
+        current_user.resume_path,
+        job.cover_letter
+    )
+
+    job.status = result
+    db.session.commit()
+
+    return jsonify({"status": result})
+
+
+# ===============================
+# REAL-TIME STATUS CHECK
+# ===============================
+@app.route("/status")
+def status():
+    # future: track running state
+    return jsonify({"running": False})
+
+
+# ===============================
+# UPLOAD RESUME
+# ===============================
 @app.route("/upload", methods=["POST"])
 @login_required
 def upload():
@@ -74,7 +141,9 @@ def upload():
 
     os.makedirs("uploads", exist_ok=True)
 
-    path = os.path.join("uploads", secure_filename(file.filename))
+    filename = secure_filename(file.filename)
+    path = os.path.join("uploads", filename)
+
     file.save(path)
 
     current_user.resume_path = path
@@ -83,7 +152,9 @@ def upload():
     return redirect("/")
 
 
-# 🔐 LOGIN
+# ===============================
+# LOGIN
+# ===============================
 @app.route("/login", methods=["GET", "POST"])
 def login():
 
@@ -94,10 +165,14 @@ def login():
             login_user(user)
             return redirect("/")
 
+        return "Invalid credentials"
+
     return render_template("login.html")
 
 
-# 🆕 REGISTER
+# ===============================
+# REGISTER
+# ===============================
 @app.route("/register", methods=["GET", "POST"])
 def register():
 
@@ -121,7 +196,9 @@ def register():
     return render_template("register.html")
 
 
-# 🚪 LOGOUT
+# ===============================
+# LOGOUT
+# ===============================
 @app.route("/logout")
 @login_required
 def logout():
@@ -129,5 +206,8 @@ def logout():
     return redirect("/login")
 
 
+# ===============================
+# START APP
+# ===============================
 if __name__ == "__main__":
     app.run(debug=True)
